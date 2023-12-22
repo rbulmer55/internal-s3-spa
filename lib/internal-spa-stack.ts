@@ -16,6 +16,7 @@ import * as r53Targets from 'aws-cdk-lib/aws-route53-targets';
 
 const hostedZoneName = '--update--me';
 const domainName = '--update--me';
+const numberOfAZs = 2;
 
 //pass in our hosted zone
 interface IPrivateWebsiteProps extends cdk.StackProps {
@@ -32,7 +33,7 @@ export class InternalSpaStack extends cdk.Stack {
 
 		// Create a VPC with two private subnets for our ALB and VPCE
 		const vpc = new ec2.Vpc(this, 'MyVPC', {
-			maxAzs: 2, // Specify the desired number of Availability Zones
+			maxAzs: numberOfAZs, // Specify the desired number of Availability Zones
 			subnetConfiguration: [
 				{
 					cidrMask: 24,
@@ -240,7 +241,7 @@ export class InternalSpaStack extends cdk.Stack {
 			.getAtt('NetworkInterfaceIps')
 			.toStringList();
 
-		const totalSubnets = 2;
+		const totalSubnets = numberOfAZs;
 
 		return [
 			s3InterfaceEndpoint,
